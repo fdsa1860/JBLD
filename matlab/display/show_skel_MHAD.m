@@ -11,7 +11,7 @@ z = data(3:3:end,:);
 
 T = size(data,2);
 
-clf;
+% clf;
 
 
 
@@ -20,6 +20,7 @@ for t=1:T
     
     set(gca,'DataAspectRatio',[1 1 1]);
     axis([min(min(x)) max(max(x)) min(min(y)) max(max(y)) min(min(z)) max(max(z))]);
+%     axis([40 180 -100 100 80 300]);
     for j=1:34
         c1=J(1,j);
         c2=J(2,j);

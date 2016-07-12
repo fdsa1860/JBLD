@@ -1,4 +1,4 @@
-function [x,eta,r,iter] = hstln1_mo(u,R,x0)
+function [u_hat,eta,x,r,iter] = hstln1_mo(u,R,x0)
 
 % u : DxN input signal
 % R : order of the system
@@ -15,7 +15,8 @@ nc = R+1;
 nr = (u_N-nc+1)*u_D;
 
 % make the input sequence hankel
-Ab = mex_hankel_mo(u,[nr nc]);
+% Ab = mex_hankel_mo(u,[nr nc]);
+Ab = hankel_mo(u,[nr nc]);
 
 A = Ab(:,1:end-1);
 b = Ab(:,end);
@@ -43,7 +44,8 @@ dx   = randn(R,1);
 for iter=1:maxiter
     
     % form matrices 
-    E   = mex_hankel_mo(reshape(eta,size(u)),[nr nc-1]);
+%     E   = mex_hankel_mo(reshape(eta,size(u)),[nr nc-1]);
+    E   = hankel_mo(reshape(eta,size(u)),[nr nc-1]);
 %     E = hankel(eta(1:nr), eta(nr:u_N-1) );
 %     Y = toeplitz( [x(1,1);zeros(nr-1,1)], [x; zeros(nr-1,1)] );
     Yrow(1:u_D:u_D*R) = x';
@@ -85,7 +87,7 @@ for iter=1:maxiter
     norm_dparam = norm(dparam);
     
     fprintf('iteration:%d norm_dparam:%f\n',iter,norm_dparam);
-    if 1
+    if 0
         figure(11)
         t_eta = reshape(eta,size(u));
         plot([u' (u+t_eta)']);
@@ -98,4 +100,4 @@ for iter=1:maxiter
 end
 eta = reshape(eta,size(u));
 r = r';
-
+u_hat = u + eta;
