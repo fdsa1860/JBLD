@@ -37,19 +37,19 @@ end
 labels = load(fullfile(directory, 'labels'));
 data = load(fullfile(directory, 'features'));
 
-% opt.metric = 'JBLD';
+opt.metric = 'JBLD';
 % opt.metric = 'JBLD_denoise';
 % opt.metric = 'binlong';
 % opt.metric = 'AIRM';
 % opt.metric = 'LERM';
-opt.metric = 'KLDM';
+% opt.metric = 'KLDM';
 % opt.metric = 'SubspaceAngle';
 % opt.metric = 'SubspaceAngleFast';
 
 opt.H_structure = 'HHt';
 % opt.H_structure = 'HtH';
-opt.H_rows = 5;
-% opt.H_rows = 4; % UTKinect parameter, shortest video is 4 frames
+opt.H_rows = 3;
+% opt.H_rows = 20; % UTKinect parameter, shortest video is 4 frames
 opt.sigma = 0.0001;
 % opt.epsilon = 0.01; % SubspaceAngle parameter
 % opt.SA_thr = 0.5;   % SubspaceAngle parameter

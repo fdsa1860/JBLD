@@ -1,11 +1,14 @@
 
-function HH = getHH(features,opt)
+function [HH, H] = getHH(features,opt)
 
 s = size(features{1});
 
 if ~exist('opt','var')
     opt.H_structure = 'HHt';
     opt.metric = 'JBLD';
+end
+if nargout > 1
+    H = cell(1,length(features));
 end
 
 HH = cell(1,length(features));
@@ -29,6 +32,7 @@ for i=1:length(features)
     end
     HHt = HHt / norm(HHt,'fro');
     if strcmp(opt.metric,'JBLD') || strcmp(opt.metric,'JBLD_denoise') ...
+            || strcmp(opt.metric,'JBLD_XYX') || strcmp(opt.metric,'JBLD_XYY') ...
             || strcmp(opt.metric,'AIRM') || strcmp(opt.metric,'LERM')...
             || strcmp(opt.metric,'KLDM')
         I = opt.sigma*eye(size(HHt));
@@ -36,6 +40,9 @@ for i=1:length(features)
     elseif strcmp(opt.metric,'binlong') || strcmp(opt.metric,'SubspaceAngle') ||...
             strcmp(opt.metric,'SubspaceAngleFast')
         HH{i} = HHt;
+    end
+    if nargout > 1
+        H{i} = Ht;
     end
 end
 
