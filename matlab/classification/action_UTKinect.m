@@ -1,5 +1,7 @@
-function action_UTKinect(HH, tr_info, labels, opt)
+function action_UTKinect(data, tr_info, labels, opt)
 
+jointsVel = getVelocity(data.joints);
+HH = getHH(jointsVel, opt);
 feat = HH;
 % feat = getLogHH(HH);
 
@@ -33,8 +35,6 @@ if ~exist(results_dir,'dir')
     mkdir(results_dir);
 end
 
-
-
 unique_classes = unique(action_labels);
 n_classes = length(unique_classes);
 
@@ -67,15 +67,6 @@ for si = 1:n_tr_te_splits
     
     % train NN
     [predicted_labels,~,time] = nn(X_train, y_train, X_test, opt);
-    
-    % train NN2
-    %         [predicted_labels,~,time] = nn2(X_train, y_train, y_subject_train, X_test, opt);
-    
-    %         C_val = 1;
-    %         [total_accuracy(si), cw_accuracy(si,:), confusion_matrices{si}] = svm_one_vs_all(X_train, X_test,y_train, y_test, C_val);
-    
-    %         % test KNN
-    %                 predicted_labels = knn(X_train, y_train, X_test, opt);
     
     total_accuracy(si) = nnz(y_test==predicted_labels)/ length(y_test);
     %         unique_classes = unique(y_test);
