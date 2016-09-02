@@ -1,9 +1,10 @@
 function action_MSR3D(data, tr_info, labels, opt)
 
 jointsVel = getVelocity(data.joints);
-HH = getHH(jointsVel, opt);
-feat = HH;
+% HH = getHH(jointsVel, opt);
+% feat = HH;
 % feat = getLogHH(HH);
+feat = jointsVel;
 
 total_preprocessingTime = toc(opt.tStart);
 
@@ -60,10 +61,10 @@ for set = 1:n_action_sets
 %         tr_ind = tr_subject_ind; % uncomment if use MSR all actions
 %         te_ind = te_subject_ind; % uncomment if use MSR all actions
         
-        X_train = feat(:,tr_ind);
+        X_train = feat(tr_ind);
         y_train = action_labels(tr_ind);
         y_subject_train = subject_labels(tr_ind);
-        X_test = feat(:,te_ind);
+        X_test = feat(te_ind);
         y_test = action_labels(te_ind);
         
         % train NN

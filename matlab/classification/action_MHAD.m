@@ -1,14 +1,10 @@
 function action_MHAD(data, tr_info, labels, opt)
 
 jointsVel = getVelocity(data.joints);
-HH = getHH(jointsVel, opt);
-feat = HH;
+% HH = getHH(jointsVel, opt);
+% feat = HH;
 % feat = getLogHH(HH);
-
-results_dir = fullfile('..','expData','res');
-if ~exist(results_dir,'dir')
-    mkdir(results_dir);
-end
+feat = jointsVel;
 
 preprocessingTime = toc(opt.tStart);
 
@@ -48,6 +44,11 @@ end
 trainTime = time.trainTime;
 testTime = time.testTime;
 runtime = toc(opt.tStart);
+
+results_dir = fullfile('..','expData','res');
+if ~exist(results_dir,'dir')
+    mkdir(results_dir);
+end
 
 save ([results_dir, '/classification_results.mat'],...
     'accuracy', 'class_wise_accuracy','confusion_matrix', '',...

@@ -1,8 +1,9 @@
 function action_HDM05(data, tr_info, labels, opt)
 
 jointsVel = getVelocity(data.joints);
-HH = getHH(jointsVel, opt);
-feat = HH;
+% HH = getHH(jointsVel, opt);
+% feat = HH;
+feat = jointsVel;
 
 total_preprocessingTime = toc(opt.tStart);
 

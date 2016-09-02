@@ -57,6 +57,8 @@ opt.H_structure = 'HHt';
 
 % opt.epsilon = 0.01; % SubspaceAngle parameter
 % opt.SA_thr = 0.5;   % SubspaceAngle parameter
+opt.pca = true;
+opt.pcaThres = 0.9;
 
 results_dir = fullfile('..','expData','res');
 if ~exist(results_dir,'dir')

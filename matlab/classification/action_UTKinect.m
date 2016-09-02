@@ -1,9 +1,10 @@
 function action_UTKinect(data, tr_info, labels, opt)
 
 jointsVel = getVelocity(data.joints);
-HH = getHH(jointsVel, opt);
-feat = HH;
+% HH = getHH(jointsVel, opt);
+% feat = HH;
 % feat = getLogHH(HH);
+feat = jointsVel;
 
 total_preprocessingTime = toc(opt.tStart);
 
@@ -51,16 +52,17 @@ for si = 1:n_tr_te_splits
     te_instance_ind = ismember(instance_labels, te_instances(si,:));
     tr_ind = (tr_instance_ind & tr_subject_ind);
     te_ind = (te_instance_ind & te_subject_ind);
+    tr_ind = ~te_ind;
     %         tr_ind = tr_subject_ind;
     %         te_ind = te_subject_ind;
     
     %         X_train = HH(tr_ind);
-    X_train = feat(:,tr_ind);
+    X_train = feat(tr_ind);
     nTrain = length(X_train);
     y_train = action_labels(tr_ind);
     y_subject_train = subject_labels(tr_ind);
     %         X_test = HH(te_ind);
-    X_test = feat(:,te_ind);
+    X_test = feat(te_ind);
     nTest = length(X_test);
     y_test = action_labels(te_ind);
     y_subject_test = subject_labels(te_ind);
