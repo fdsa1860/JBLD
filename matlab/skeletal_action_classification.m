@@ -17,6 +17,7 @@ end
 
 addpath(genpath('.'))
 addpath(genpath('../3rdParty'))
+addpath(genpath('../mex'));
 addpath(genpath('../skeleton_data'))
 
 datasets = {'UTKinect', 'MHAD', 'MSRAction3D', 'HDM05'};

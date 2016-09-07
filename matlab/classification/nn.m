@@ -13,7 +13,12 @@ if opt.pca == true
     X_train = myPCA_apply(P, X_train);
 end
 
+% tic;
 HH_train = getHH(X_train, opt);
+% toc
+% tic
+% HH_train2 = mex_getHH(X_train, opt.H_rows);
+% toc
 
 unique_classes = unique(y_train);
 n_classes = length(unique_classes);
