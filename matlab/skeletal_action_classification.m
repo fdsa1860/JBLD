@@ -7,7 +7,7 @@ function [] = skeletal_action_classification(dataset_idx)
 % 3 if MSRAction3D
 % 4 if HDM05
 
-% dbstop if error
+dbstop if error
 
 if nargin < 1
     msg = ['You need to input the dataset index. You may run function '...
@@ -44,12 +44,12 @@ end
 labels = load(fullfile(directory, 'labels'));
 data = load(fullfile(directory, 'joints'));
 
-% opt.metric = 'JBLD';
+opt.metric = 'JBLD';
 % opt.metric = 'JBLD_denoise';
 % opt.metric = 'binlong';
 % opt.metric = 'AIRM';
 % opt.metric = 'LERM';
-opt.metric = 'KLDM';
+% opt.metric = 'KLDM';
 % opt.metric = 'SubspaceAngle';
 % opt.metric = 'SubspaceAngleFast';
 
@@ -60,6 +60,7 @@ opt.H_structure = 'HHt';
 % opt.SA_thr = 0.5;   % SubspaceAngle parameter
 opt.pca = true;
 opt.pcaThres = 0.9;
+opt.mOrd = 2;
 
 results_dir = fullfile('..','expData','res');
 if ~exist(results_dir,'dir')

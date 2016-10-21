@@ -68,35 +68,38 @@ for set = 1:n_action_sets
         y_test = action_labels(te_ind);
         
         % train NN
-        [predicted_labels,~,time] = nn(X_train, y_train, X_test, opt);
+        [predicted_labels,~,time, HH_center] = nn(X_train, y_train, X_test, opt);
+%         
+%         total_accuracy(si) = nnz(y_test==predicted_labels)/ length(y_test);
+%         unique_classes = unique(y_test);
+%         n_classes = length(unique_classes);
+%         class_wise_accuracy = zeros(1, n_classes);
+%         confusion_matrix = zeros(n_classes, n_classes);
+%         for i = 1:n_classes
+%             temp = find(y_test == unique_classes(i));
+%             if ~isempty(temp)
+%                 class_wise_accuracy(i) =...
+%                     nnz(predicted_labels(temp)==unique_classes(i)) / length(temp);
+%                 confusion_matrix(i, :) = ...
+%                     hist(predicted_labels(temp), unique_classes) / length(temp);
+%             else
+%                 class_wise_accuracy(i) = 1;
+%                 confusion_matrix(i, i) = 1;
+%             end
+%         end
+%         cw_accuracy(si,:) = class_wise_accuracy;
+%         confusion_matrices{si} = confusion_matrix;
+%         trainTime(si) = time.trainTime;
+%         testTime(si) = time.testTime;
         
-        total_accuracy(si) = nnz(y_test==predicted_labels)/ length(y_test);
-        unique_classes = unique(y_test);
-        n_classes = length(unique_classes);
-        class_wise_accuracy = zeros(1, n_classes);
-        confusion_matrix = zeros(n_classes, n_classes);
-        for i = 1:n_classes
-            temp = find(y_test == unique_classes(i));
-            if ~isempty(temp)
-                class_wise_accuracy(i) =...
-                    nnz(predicted_labels(temp)==unique_classes(i)) / length(temp);
-                confusion_matrix(i, :) = ...
-                    hist(predicted_labels(temp), unique_classes) / length(temp);
-            else
-                class_wise_accuracy(i) = 1;
-                confusion_matrix(i, i) = 1;
-            end
-        end
-        cw_accuracy(si,:) = class_wise_accuracy;
-        confusion_matrices{si} = confusion_matrix;
-        trainTime(si) = time.trainTime;
-        testTime(si) = time.testTime;
-        
-        %         % SVM
-        %         D1 = HHdist(HH_center,X_train,opt.metric);
-        %         D2 = HHdist(HH_center,X_test,opt.metric);
-        %         [total_accuracy(si), cw_accuracy(si,:), confusion_matrices{si}] =...
-        %             svm_one_vs_all(D1, D2, y_train, y_test, C_val);
+                % SVM
+                C_val = 10;
+                HH_train = getHH(X_train, opt);
+                HH_test = getHH(X_test, opt);
+                D1 = HHdist(HH_center,HH_train,opt);
+                D2 = HHdist(HH_center,HH_test,opt);
+                [total_accuracy(si), cw_accuracy(si,:), confusion_matrices{si}] =...
+                    svm_one_vs_all(D1, D2, y_train, y_test, C_val);
         
     end
     

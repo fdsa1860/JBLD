@@ -23,6 +23,7 @@ X_test = feat(te_ind);
 y_test = action_labels(te_ind);
 
 [predicted_labels,D2,time,HH_center] = nn(X_train, y_train, X_test, opt);
+% [predicted_labels,D2,time,HH_center] = nn_sos(X_train, y_train, X_test, opt);
 
 accuracy = nnz(y_test==predicted_labels)/ length(y_test);
 unique_classes = unique(y_test);
