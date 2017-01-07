@@ -20,7 +20,7 @@ addpath(genpath('../3rdParty'))
 addpath(genpath('../mex'));
 addpath(genpath('../skeleton_data'))
 
-datasets = {'UTKinect', 'MHAD', 'MSRAction3D', 'HDM05'};
+datasets = {'UTKinect', 'MHAD', 'MSRAction3D', 'HDM05', 'extendCK'};
 
 if (dataset_idx > length(datasets))
     error('Dataset index should be less than %d\n',length(datasets));
@@ -37,7 +37,9 @@ generate_features(directory, datasets{dataset_idx});
 % Training and testing subjects
 if strcmp(datasets{dataset_idx},'UTKinect') || strcmp(datasets{dataset_idx},'MSRAction3D') 
     tr_info = load(['../skeleton_data/', datasets{dataset_idx}, '/tr_te_splits']);
-elseif strcmp(datasets{dataset_idx},'HDM05') || strcmp(datasets{dataset_idx},'MHAD')
+elseif strcmp(datasets{dataset_idx},'HDM05') ||...
+        strcmp(datasets{dataset_idx},'MHAD') ||...
+        strcmp(datasets{dataset_idx},'extendCK')
     tr_info = load([directory, '/tr_te_splits']);
 end
 
@@ -59,7 +61,7 @@ opt.H_structure = 'HHt';
 % opt.epsilon = 0.01; % SubspaceAngle parameter
 % opt.SA_thr = 0.5;   % SubspaceAngle parameter
 opt.pca = true;
-opt.pcaThres = 0.9;
+opt.pcaThres = 0.99;
 opt.mOrd = 2;
 
 results_dir = fullfile('..','expData','res');
@@ -74,15 +76,22 @@ if strcmp(datasets{dataset_idx}, 'UTKinect')
 elseif strcmp(datasets{dataset_idx}, 'MHAD')
     opt.H_rows = 5;
     opt.sigma = 0.0001;
-    action_MHAD(data,tr_info,labels,opt);
+%     action_MHAD(data,tr_info,labels,opt);
+    action_MHAD3(data,tr_info,labels,opt);
 elseif strcmp(datasets{dataset_idx}, 'MSRAction3D')
     opt.H_rows = 5;
     opt.sigma = 0.01;
     action_MSR3D(data,tr_info,labels,opt);
+%     action_MSR3D_3(data,tr_info,labels,opt);
 elseif strcmp(datasets{dataset_idx}, 'HDM05')
     opt.H_rows = 5;
     opt.sigma = 0.01;
-    action_HDM05(data,tr_info,labels,opt);
+%     action_HDM05(data,tr_info,labels,opt);
+    action_HDM05_3(data, tr_info, labels, opt);
+elseif strcmp(datasets{dataset_idx}, 'extendCK')
+    opt.H_rows = 5;
+    opt.sigma = 0.0001;
+    expression_extendCK(data,tr_info,labels,opt);
 else
     error('unknown dataset.\n')
 end

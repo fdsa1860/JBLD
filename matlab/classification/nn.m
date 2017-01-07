@@ -53,7 +53,7 @@ elseif strcmp(opt.metric,'JBLD') || strcmp(opt.metric,'JLD_denoise')
         %             if isinf(cparams(ai).alpha), keyboard;end
         %             cparams(ai).theta = max(0.01,phat(2));
         %             cparams(ai).prior = length(X_tmp) / length(X_train);
-        fprintf('processed %d/%d\n',ai,n_classes);
+        fprintf('trained %d/%d\n',ai,n_classes);
     end
 elseif strcmp(opt.metric,'AIRM')
     HH_center = cell(1, n_classes);

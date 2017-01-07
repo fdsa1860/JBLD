@@ -99,7 +99,18 @@ elseif (strcmp(dataset, 'HDM05'))
     save([directory, '/tr_te_splits'], 'tr_subjects', 'te_subjects');
     save([directory, '/joints'], 'joints', '-v7.3');
     save([directory, '/labels'], 'action_labels', 'subject_labels', 'instance_labels');
-    
+elseif strcmp(dataset, 'extendCK')
+%     [seq, emoLabel, subLabel, insLabel] = parseExtendCK;
+    [joints, action_labels, subject_labels,instance_labels] = parseExtendCK;
+    tmp = diff(subject_labels);
+    tmp = double(tmp ~= 0);
+    subject_labels = cumsum([1 tmp]);
+    nSub = length(unique(subject_labels));
+    tr_subjects = nchoosek(1:nSub,nSub-1);
+    te_subjects = flipud(nchoosek(1:nSub,1));
+    save([directory, '/tr_te_splits'], 'tr_subjects', 'te_subjects');
+    save([directory, '/joints'], 'joints', '-v7.3');
+    save([directory, '/labels'], 'action_labels', 'subject_labels', 'instance_labels');
 else
     error('Unknown dataset');
 end
