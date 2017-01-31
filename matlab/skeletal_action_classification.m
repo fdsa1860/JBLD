@@ -6,6 +6,8 @@ function [] = skeletal_action_classification(dataset_idx)
 % 2 if MHAD
 % 3 if MSRAction3D
 % 4 if HDM05
+% 5 if extendCK
+% 6 if subJHMDB
 
 dbstop if error
 
@@ -20,7 +22,7 @@ addpath(genpath('../3rdParty'))
 addpath(genpath('../mex'));
 addpath(genpath('../skeleton_data'))
 
-datasets = {'UTKinect', 'MHAD', 'MSRAction3D', 'HDM05', 'extendCK'};
+datasets = {'UTKinect', 'MHAD', 'MSRAction3D', 'HDM05', 'extendCK','SubJHMDB'};
 
 if (dataset_idx > length(datasets))
     error('Dataset index should be less than %d\n',length(datasets));
@@ -32,14 +34,17 @@ if ~exist(directory,'dir')
 end
 
 opt.tStart = tic;
-generate_features(directory, datasets{dataset_idx});
+if ~exist(fullfile(directory, 'joints.mat'), 'file');
+    generate_features(directory, datasets{dataset_idx});
+end
 
 % Training and testing subjects
 if strcmp(datasets{dataset_idx},'UTKinect') || strcmp(datasets{dataset_idx},'MSRAction3D') 
     tr_info = load(['../skeleton_data/', datasets{dataset_idx}, '/tr_te_splits']);
 elseif strcmp(datasets{dataset_idx},'HDM05') ||...
         strcmp(datasets{dataset_idx},'MHAD') ||...
-        strcmp(datasets{dataset_idx},'extendCK')
+        strcmp(datasets{dataset_idx},'extendCK') ||... 
+        strcmp(datasets{dataset_idx},'SubJHMDB')
     tr_info = load([directory, '/tr_te_splits']);
 end
 
@@ -92,6 +97,12 @@ elseif strcmp(datasets{dataset_idx}, 'extendCK')
     opt.H_rows = 5;
     opt.sigma = 0.0001;
     expression_extendCK(data,tr_info,labels,opt);
+elseif strcmp(datasets{dataset_idx}, 'SubJHMDB')
+    opt.H_rows = 1;
+    opt.sigma = 0.0001;
+    opt.nCluster = 10;
+    opt.C_val = 10;
+    action_SubJHMDB(data,tr_info,labels,opt);
 else
     error('unknown dataset.\n')
 end

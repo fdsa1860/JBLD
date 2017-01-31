@@ -111,6 +111,12 @@ elseif strcmp(dataset, 'extendCK')
     save([directory, '/tr_te_splits'], 'tr_subjects', 'te_subjects');
     save([directory, '/joints'], 'joints', '-v7.3');
     save([directory, '/labels'], 'action_labels', 'subject_labels', 'instance_labels');
+elseif strcmp(dataset, 'SubJHMDB')
+    %     [seq, emoLabel, subLabel, insLabel] = parseExtendCK;
+    [joints, action_labels, tr_te_splits] = parseSubJHMDB;
+    save([directory, '/tr_te_splits'], 'tr_te_splits');
+    save([directory, '/joints'], 'joints', '-v7.3');
+    save([directory, '/labels'], 'action_labels');
 else
     error('Unknown dataset');
 end
